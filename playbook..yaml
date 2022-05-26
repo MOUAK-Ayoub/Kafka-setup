@@ -1,7 +1,7 @@
 ---
 
 - name: Actions for all servers
-  hosts: centos
+  hosts: localhost
   become: yes
   vars_files:
     - "./vars/{{ env }}.yml"

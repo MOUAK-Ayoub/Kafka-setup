@@ -4,28 +4,51 @@
   hosts: localhost
   become: yes
   vars_files:
-    - "./vars/{{ env }}.yml"
+     - "./vars/{{env}}.yaml"
   tasks:
      - name: install java 8 
        yum:
-         name: "openjdk-{{kafka.java-version}}-jdk"
+         name: "java-{{kafka.java.version}}-openjdk"
          state: latest
+         
+     - name: checking if line of swap=1 exists
+       shell: cat /etc/sysctl.conf | grep vm.swappiness=1 | wc -l
+       register: swap_1_exists
 
      - name: Configure swappinness
        lineinfile:
           path: /etc/sysctl.conf
           line: vm.swappiness=1
-          
+       when: swap_1_exists.stdout=="0"
+     
+     - name: checking if kafka list of hosts exists in /etc/hosts
+       shell: cat /etc/hosts | grep 'kafka*\|zookeeper*' | wc -l
+       register: kafka_hosts_exists
+         
      - name: Configure /etc/hosts
        lineinfile:
           path: /etc/hosts
-          line: " {{ servers.ip-address }} {{ servers.hostname }}"
+          line: " {{ item.ip_address }} {{ item.hostname }}"
        loop: "{{ servers }}"
+       when: kafka_hosts_exists.stdout=="0"
+       
+     - name: Check the kafka directory exists
+       stat:
+         path: /home/ansible/kafka
+       register: kafka_dir  
+       
      - name: Download kafka (with zookeeper)
        get_url:
-         url: "https://archive.apache.org/dist/kafka/{{kafka.version}}/kafka_{{kafka.scala-version}}-{{kafka.version}}.tgz"
+         url: "https://archive.apache.org/dist/kafka/{{kafka.version}}/kafka_{{kafka.scala.version}}-{{kafka.version}}.tgz"
          dest: /tmp/
-     - name: Extract foo.tgz into /var/lib/foo
+       when: not kafka_dir.stat.exists
+         
+     - name: Extract kafka tar
        unarchive:
-         src: /tmp/kafka_{{kafka.scala-version}}-{{kafka.version}}.tgz
+         src: /tmp/kafka_{{kafka.scala.version}}-{{kafka.version}}.tgz
          dest: /home/ansible/
+       when: not kafka_dir.stat.exists
+        
+     - name:  rename kafka folder
+       command: "mv /home/ansible/kafka_{{kafka.scala.version}}-{{kafka.version}} /home/ansible/kafka"
+       when: not kafka_dir.stat.exists 

@@ -1,6 +1,11 @@
 ** For multistage env see:
 https://www.digitalocean.com/community/tutorials/how-to-manage-multistage-environments-with-ansible
 
+<<<<<<< HEAD
 ** launch playbook
 ansible-playbook -i ./vars/inv --extra-vars='{"env":"dev"}'  playbook.yaml;
 
+=======
+** To launch the playbook
+ansible-playbook -i ./vars/inv -e "env=dev"  playbook.yaml;
+>>>>>>> 961c13e75ed7a09d759fffcc30ca444097602add

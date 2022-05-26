@@ -3,20 +3,22 @@
 # Dev env vars
 
 servers:
-  - ip-adress: 172.31.100.122
+  - ip_address: 172.31.100.122
     hostname: kafka1 
-  - ip-adress: 172.31.99.189
+  - ip_address: 172.31.99.189
     hostname: kafka2 
-  - ip-adress: 172.31.97.196
+  - ip_address: 172.31.97.196
     hostname: kafka3 
-  - ip-adress: 172.31.100.122
+  - ip_address: 172.31.100.122
     hostname: zookeeper1
-  - ip-adress: 172.31.99.189
+  - ip_address: 172.31.99.189
     hostname: zookeeper2
-  - ip-adress: 172.31.97.196
+  - ip_address: 172.31.97.196
     hostname: zookeeper3
 
 kafka:
-  version: 2.13
-  java-version: 8
-  scala-version: 2.12
+  version: 2.5.0
+  java:
+   version: 1.8.0
+  scala:
+   version: 2.12

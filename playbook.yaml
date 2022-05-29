@@ -51,4 +51,18 @@
         
      - name:  rename kafka folder
        command: "mv /home/ansible/kafka_{{kafka.scala.version}}-{{kafka.version}} /home/ansible/kafka"
-       when: not kafka_dir.stat.exists 
+       when: not kafka_dir.stat.exists
+
+
+     - name: Add zookeeper service 
+       cp:
+          src: ./zookeeper/zookeeper-service
+          dest: /etc/init.d/zookeeper
+          mode: u+x
+       when: not kafka_dir.stat.exists
+
+     - name: start zookeeper 
+       service:
+          name: zookeeper
+          state: started
+          enabled: yes

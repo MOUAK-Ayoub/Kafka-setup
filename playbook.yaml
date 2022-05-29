@@ -54,12 +54,12 @@
        when: not kafka_dir.stat.exists
 
 
-     - name: Add zookeeper service 
-       cp:
-          src: ./zookeeper/zookeeper-service
-          dest: /etc/init.d/zookeeper
-          mode: u+x
-       when: not kafka_dir.stat.exists
+     - name: Add zookeeper service
+       copy:
+        src: ./zookeeper/zookeeper-service
+        dest: /etc/init.d/zookeeper
+        mode: u+x
+
 
      - name: start zookeeper 
        service:

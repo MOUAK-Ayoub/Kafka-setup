@@ -53,20 +53,19 @@
        command: "mv /home/ansible/kafka_{{kafka.scala.version}}-{{kafka.version}} /home/ansible/kafka"
        when: not kafka_dir.stat.exists
 
-
      - name: checking if kafka list of hosts exists in /etc/hosts
        shell: chkconfig --list  | grep zookeeper | wc -l
        register: zookeeper_service_exists
 
-     - name: Add zookeeper service 
-       cp:
-          src: ./zookeeper/zookeeper-service
-          dest: /etc/init.d/zookeeper
-          mode: u+x
-
      - name:  Add links between init.d and rc.d
        command: "chkconfig --add zookeeper"
        when: zookeeper_service_exists.stdout=="0"
+
+     - name: Add zookeeper service
+       copy:
+        src: ./zookeeper/zookeeper-service
+        dest: /etc/init.d/zookeeper
+        mode: u+x
 
      - name: start zookeeper 
        service:

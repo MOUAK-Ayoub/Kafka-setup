@@ -44,6 +44,11 @@
 [localhost]
 localhost
 
+[dev]
+localhost
+slave1
+slave2
+
 
 [centos]
 localhost

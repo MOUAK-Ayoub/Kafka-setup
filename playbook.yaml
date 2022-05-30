@@ -1,7 +1,7 @@
 ---
 
 - name: Actions for all servers
-  hosts: localhost
+  hosts: dev
   become: yes
   vars_files:
      - "./vars/{{env}}.yaml"

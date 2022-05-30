@@ -68,4 +68,7 @@
        when: zookeeper_service_exists.stdout=="0"
 
      - name: start zookeeper 
-       command: "service zookeeper start"
+       service: 
+         name: zookeeper
+         state: started
+         enabled: yes

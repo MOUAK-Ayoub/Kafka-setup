@@ -8,13 +8,10 @@
 zookeeper:
   - ip_address: 172.31.100.122
     hostname: zookeeper1
-    id: 1
   - ip_address: 172.31.99.189
     hostname: zookeeper2
-    id: 2
   - ip_address: 172.31.97.196
     hostname: zookeeper3
-    id: 3
 
 kafka:
   version: 2.5.0

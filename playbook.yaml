@@ -57,18 +57,15 @@
        shell: chkconfig --list  | grep zookeeper | wc -l
        register: zookeeper_service_exists
 
-     - name:  Add links between init.d and rc.d
-       command: "chkconfig --add zookeeper"
-       when: zookeeper_service_exists.stdout=="0"
-
      - name: Add zookeeper service
        copy:
         src: ./zookeeper/zookeeper-service
         dest: /etc/init.d/zookeeper
         mode: u+x
 
+     - name:  Add links between init.d and rc.d
+       command: "chkconfig --add zookeeper"
+       when: zookeeper_service_exists.stdout=="0"
+
      - name: start zookeeper 
-       service:
-          name: zookeeper
-          state: started
-          enabled: yes
+       command: "service zookeeper start"

@@ -29,14 +29,14 @@
        lineinfile:
           path: /etc/hosts
           line: " {{ item.ip_address }} {{ item.hostname }}"
-       loop: "{{ kafka.servers }}"
+       loop: "{{ zookeeper }}"
        when: kafka_hosts_exists.stdout=="0"
 
      - name: Configure Kafka /etc/hosts
        lineinfile:
           path: /etc/hosts
           line: " {{ item.ip_address }} {{ item.hostname }}"
-       loop: "{{ zookeeper }}"
+       loop: "{{ kafka.servers }}"
        when: kafka_hosts_exists.stdout=="0"
         
      - name: Check the kafka directory exists
@@ -75,7 +75,7 @@
           create: yes
           line: "{{item.id}}"
        loop: "{{ zookeeper }}"
-       when: swap_1_exists.stdout=="0"
+  
 
 
      - name: Add zookeeper service

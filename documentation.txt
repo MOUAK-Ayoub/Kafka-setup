@@ -2,5 +2,5 @@
 https://www.digitalocean.com/community/tutorials/how-to-manage-multistage-environments-with-ansible
 
 ** To launch the playbook
-ansible-playbook -i ./vars/inv -e "env=dev"  playbook.yaml;
+ansible-playbook -i ./vars/inventory -e "env=dev"  playbook.yaml;
 

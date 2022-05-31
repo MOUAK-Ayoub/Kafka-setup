@@ -4,3 +4,5 @@ https://www.digitalocean.com/community/tutorials/how-to-manage-multistage-enviro
 ** To launch the playbook
 ansible-playbook -i ./vars/inventory -e "env=dev"  playbook.yaml;
 
+** To delete the myid file
+ansible -i vars/inventory dev -b -m file -a "name=/data/zookeeper/myid state=absent"

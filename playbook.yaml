@@ -68,15 +68,17 @@
        file:
         path: /data/zookeeper
         state: directory
+     
+     - name: check if zookeeper server id exists
+       shell: cat /data/zookeeper/myid | grep -E '[0-9]+' | wc -l
+       register: zookeeper_id_exists
 
      - name: Configure zookeeper ID
        lineinfile:
           path: /data/zookeeper/myid
           create: yes
-          line: "{{item.id}}"
-       loop: "{{ zookeeper }}"
-  
-
+          line: "{{id}}"
+       when: zookeeper_id_exists.stdout=="0"
 
      - name: Add zookeeper service
        copy:

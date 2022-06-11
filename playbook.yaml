@@ -80,7 +80,7 @@
           line: "{{id}}"
        when: zookeeper_id_exists.stdout=="0"
 
-     - name: Add zookeeper service
+     - name: Configure zookeeper.properties
        copy:
         src: ./zookeeper/zookeeper.properties
         dest: /home/ansible/kafka/config/zookeeper.properties
@@ -96,7 +96,9 @@
        when: zookeeper_service_exists.stdout=="0"
 
      - name: start zookeeper 
-       service: 
-         name: zookeeper
-         state: started
-         enabled: yes
+       command: service zookeeper start
+       #service: 
+         #name: zookeeper
+         #state: started
+         #enabled: yes
+       tags: launch

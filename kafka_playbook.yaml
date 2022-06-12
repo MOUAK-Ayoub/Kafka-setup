@@ -33,5 +33,6 @@
        when: kafka_service_exists.stdout=="0"
 
      - name: start kafka 
-       command: service kafka start
+       command: " service kafka start && service kafka enable "
        tags: launch
+

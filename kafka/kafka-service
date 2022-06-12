@@ -1,5 +1,7 @@
 #!/bin/bash
 #/etc/init.d/kafka
+# chkconfig: 2345 95 05
+
 DAEMON_PATH=/home/ansible/kafka/bin
 DAEMON_NAME=kafka
 # Check that networking is up.

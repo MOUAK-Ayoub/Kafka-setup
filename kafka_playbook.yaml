@@ -1,0 +1,38 @@
+---
+
+- name: Actions for all servers
+  hosts: dev
+  become: yes
+  vars_files:
+     - "./vars/{{env}}.yaml"
+  tasks:
+
+     - name: Create kafka data directory
+       file:
+        path: /data/kafka
+        state: directory
+
+     - name: Configure kafka server.properties
+       template:
+        src: ./kafka/server.properties.j2
+        dest: /home/ansible/kafka/config/server.properties
+
+     - name: Add kafka service
+       copy:
+        src: ./kafka/kafka-service
+        dest: /etc/init.d/kafka
+        mode: u+x
+
+     - name: checking if kafka exists as a service
+       shell: chkconfig --list  | grep kafka | wc -l
+       register: kafka_service_exists
+
+
+     - name:  Add links between init.d and rc.d for the kafka service
+       command: "chkconfig --add kafka"
+       when: kafka_service_exists.stdout=="0"
+
+     - name: start kafka 
+       command: " service kafka start && service kafka enable "
+       tags: launch
+

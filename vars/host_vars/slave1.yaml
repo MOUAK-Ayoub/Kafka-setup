@@ -1,2 +1,2 @@
 id: 2
-advertised.listeners: kafka2:9092
+advertised_listeners: kafka2:9092

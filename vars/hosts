@@ -5,9 +5,9 @@
 172.31.99.189 slave2
 172.31.97.196 slave1
 ansible.xyzcorp.com  169.168.0.1
- 172.31.100.122 kafka1
- 172.31.99.189 kafka3
- 172.31.97.196 kafka2
- 172.31.100.122 zookeeper1
- 172.31.99.189 zookeeper3
- 172.31.97.196 zookeeper2
+172.31.100.122 kafka1
+172.31.99.189 kafka3
+172.31.97.196 kafka2
+172.31.100.122 zookeeper1
+172.31.99.189 zookeeper3
+172.31.97.196 zookeeper2

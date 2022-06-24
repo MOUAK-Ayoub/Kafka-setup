@@ -1,0 +1,51 @@
+---
+
+- name: Actions for all servers
+  hosts: dev
+  become: yes
+  vars_files:
+     - "./vars/{{env}}.yaml"
+  tasks:
+         
+     - name: checking if kafka list of hosts exists in /etc/hosts
+       shell: chkconfig --list  | grep zookeeper | wc -l
+       register: zookeeper_service_exists
+
+     - name: Create zookeeper data directory
+       file:
+        path: /data/zookeeper
+        state: directory
+     
+     - name: Set Broker ID
+       set_fact:
+        broker_id: "{{ groups['dev'].index(inventory_hostname) + 1 }}"
+     
+     - name: check if zookeeper server id exists
+       shell: cat /data/zookeeper/myid | grep -E '[0-9]+' | wc -l
+       register: zookeeper_id_exists
+
+     - name: Configure zookeeper ID
+       lineinfile:
+          path: /data/zookeeper/myid
+          create: yes
+          line: "{{broker_id}}"
+       when: zookeeper_id_exists.stdout=="0"
+
+     - name: Configure zookeeper.properties
+       copy:
+        src: ./zookeeper/zookeeper.properties
+        dest: /home/ansible/kafka/config/zookeeper.properties
+
+     - name: Add zookeeper service
+       copy:
+        src: ./zookeeper/zookeeper-service
+        dest: /etc/init.d/zookeeper
+        mode: u+x
+
+     - name:  Add links between init.d and rc.d
+       command: "chkconfig --add zookeeper"
+       when: zookeeper_service_exists.stdout=="0"
+
+     - name: start zookeeper 
+       command: service zookeeper start
+       tags: launch

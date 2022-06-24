@@ -7,6 +7,10 @@
      - "./vars/{{env}}.yaml"
   tasks:
 
+     - name: set broker id
+       set_fact:
+          broker_id: "{{ groups['dev'].index(inventory_hostname) + 1 }}"
+
      - name: Create kafka data directory
        file:
         path: /data/kafka
@@ -33,6 +37,6 @@
        when: kafka_service_exists.stdout=="0"
 
      - name: start kafka 
-       command: " service kafka start && service kafka enabled "
+       command: " service kafka start  "
        tags: launch
 

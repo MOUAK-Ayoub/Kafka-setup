@@ -8,8 +8,9 @@
   tasks:
      - name: install java 8 
        yum:
-         name: "java-{{kafka.java.version}}-openjdk"
+         name: "java-{{kafka.java.version}}-openjdk-devel"
          state: latest
+       tags: java
          
      - name: checking if line of swap=1 exists
        shell: cat /etc/sysctl.conf | grep vm.swappiness=1 | wc -l

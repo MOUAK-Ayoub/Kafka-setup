@@ -3,8 +3,8 @@ Description=Kafka
 After=network.target
 
 [Service]
-User=ansible
-Group=ansible
+User=root
+Group=root
 Environment="KAFKA_HEAP_OPTS=-Xmx256M -Xms128M"
 Environment="KAFKA_OPTS=-javaagent:/home/ansible/prometheus/jmx_prometheus_javaagent-0.17.0.jar=7077:/home/ansible/prometheus/kafka-2_0_0.yml"
 ExecStart=/home/ansible/kafka/bin/kafka-server-start.sh /home/ansible/kafka/config/server.properties

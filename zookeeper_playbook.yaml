@@ -7,26 +7,23 @@
      - "./vars/{{env}}.yaml"
   tasks:
          
-     - name: checking if kafka list of hosts exists in /etc/hosts
-       shell: chkconfig --list  | grep zookeeper | wc -l
-       register: zookeeper_service_exists
-
-     - name: Create zookeeper data directory
-       file:
-        path: /data/zookeeper
-        state: directory
-     
      - name: Set Broker ID
        set_fact:
         broker_id: "{{ groups['dev'].index(inventory_hostname) + 1 }}"
+
+     - name: Create zookeeper data directory
+       file:
+        path: /home/ansible/data/zookeeper
+        state: directory
+     
      
      - name: check if zookeeper server id exists
-       shell: cat /data/zookeeper/myid | grep -E '[0-9]+' | wc -l
+       shell: cat /home/ansible/data/zookeeper/myid | grep -E '[0-9]+' | wc -l
        register: zookeeper_id_exists
 
      - name: Configure zookeeper ID
        lineinfile:
-          path: /data/zookeeper/myid
+          path: /home/ansible/data/zookeeper/myid
           create: yes
           line: "{{broker_id}}"
        when: zookeeper_id_exists.stdout=="0"
@@ -39,13 +36,14 @@
      - name: Add zookeeper service
        copy:
         src: ./zookeeper/zookeeper-service
-        dest: /etc/init.d/zookeeper
+        dest: /etc/systemd/system/zookeeper.service
         mode: u+x
 
-     - name:  Add links between init.d and rc.d
-       command: "chkconfig --add zookeeper"
-       when: zookeeper_service_exists.stdout=="0"
-
-     - name: start zookeeper 
-       command: service zookeeper start
+     - name: Start zookeeper nodes
+       systemd:
+         name: zookeeper
+         state: restarted
+         daemon_reload: yes
        tags: launch
+
+

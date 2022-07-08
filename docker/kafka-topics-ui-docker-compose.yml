@@ -17,7 +17,7 @@ services:
     image: confluentinc/cp-kafka-rest:3.2.1
     network_mode: host
     environment:
-      KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
       KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181/kafka
       KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://localhost:8081/

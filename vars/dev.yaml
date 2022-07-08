@@ -3,8 +3,6 @@
 # Dev env vars
 
 
-
-
 zookeeper:
   - ip_address: 172.31.100.122
     hostname: zookeeper1

@@ -13,30 +13,38 @@
 
      - name: Create kafka data directory
        file:
-        path: /data/kafka
+        path: /home/ansible/{{ item }}
         state: directory
-
+       loop:
+          - data/kafka/
+          - prometheus/
+ 
      - name: Configure kafka server.properties
        template:
         src: ./kafka/server.properties.j2
         dest: /home/ansible/kafka/config/server.properties
 
+     - name: Download JMX Prometheus agent
+       get_url:
+         url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.17.0/jmx_prometheus_javaagent-0.17.0.jar"
+         dest: /home/ansible/prometheus/
+
+     - name: Download Kafka  Prometheus config
+       get_url:
+         url: "https://raw.githubusercontent.com/prometheus/jmx_exporter/master/example_configs/kafka-2_0_0.yml"
+         dest: /home/ansible/prometheus/
+
+
      - name: Add kafka service
        copy:
         src: ./kafka/kafka-service
-        dest: /etc/init.d/kafka
+        dest: /etc/systemd/system/kafka.service
         mode: u+x
 
-     - name: checking if kafka exists as a service
-       shell: chkconfig --list  | grep kafka | wc -l
-       register: kafka_service_exists
-
-
-     - name:  Add links between init.d and rc.d for the kafka service
-       command: "chkconfig --add kafka"
-       when: kafka_service_exists.stdout=="0"
-
-     - name: start kafka 
-       command: " service kafka start  "
+     - name: Start kafka brokers
+       systemd:
+         state: started
+         daemon_reload: yes
        tags: launch
+
 
